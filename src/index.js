@@ -9,6 +9,7 @@ import LogInPage from './screens/LogInPage';
 import CreateAccountPage from './screens/CreateAccountPage';
 import HomePage from './screens/HomePage';
 import TabBar from './Components/TabBar';
+import Categories from './screens/Categories';
 
 const Stack = createNativeStackNavigator();
 
@@ -52,6 +53,7 @@ function HomeStack() {
       }}
       initialRouteName="HomePage">
       <Stack.Screen name="HomePage" component={HomePage} />
+      <Stack.Screen name="Categories" component={Categories} />
       {/* <Stack.Screen name="Menu" component={Menu} /> */}
       {/* <Stack.Screen name="PlaceOrderPage" component={PlaceOrderPage} /> */}
       {/* <Stack.Screen name="OrderPage" component={OrderPage} /> */}
