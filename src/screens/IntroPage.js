@@ -6,13 +6,19 @@ import {
   TouchableOpacity,
   LayoutAnimation,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
+import NavService from '../config/NavService';
+import SplashScreen from 'react-native-splash-screen';
 
 const {width, height} = Dimensions.get('screen');
 
 const IntroPage = props => {
+  useEffect(() => {
+    SplashScreen.hide();
+  }, []);
   const [index, setIndex] = useState(0);
+  console.log(!index === 2, 'dee');
   return (
     <View
       style={{
@@ -21,7 +27,12 @@ const IntroPage = props => {
         paddingTop: getStatusBarHeight(),
         paddingHorizontal: 20,
       }}>
-      <Text style={{color: '#fff'}}>Skip</Text>
+      <TouchableOpacity
+        onPress={() => {
+          NavService.navigate('WelcomePage');
+        }}>
+        <View>{index !== 2 && <Text style={{color: '#fff'}}>Skip</Text>}</View>
+      </TouchableOpacity>
       <Image
         style={{
           width: width - 30,

@@ -1,8 +1,18 @@
 import {View, Text, Image} from 'react-native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
+import {useDispatch, useSelector} from 'react-redux';
+import SplashScreen from 'react-native-splash-screen';
+import {saveUser} from '../redux/actions';
 
 const HomePage = props => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    // dispatch(saveUser(null));
+    SplashScreen.hide();
+  }, []);
+  const user = useSelector(state => state.user);
+  console.log(user);
   return (
     <View
       style={{

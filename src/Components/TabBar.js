@@ -11,6 +11,7 @@ import {
 import CustomButton from './CustomButton';
 import ActionSheet from 'react-native-actions-sheet';
 import Modal from 'react-native-modal';
+import {addTask} from '../firebase';
 
 const {length, width} = Dimensions.get('screen');
 
@@ -70,6 +71,8 @@ export default function TabBar(props) {
   const [isVisible, setIsVisible] = useState(false);
   const [priority, setPriority] = useState(1);
   const [isVisible2, setIsVisible2] = useState(false);
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
   return (
     <View
       style={{
@@ -270,7 +273,11 @@ export default function TabBar(props) {
           </Modal>
           <Text style={{color: '#fff'}}>Add Task</Text>
           <ActionSheetTextInput placeholder="Add title" />
-          <ActionSheetTextInput placeholder="Add Description" />
+          <ActionSheetTextInput
+            placeholder="Add Description"
+            value={''}
+            onChangeText={''}
+          />
           <View
             style={{
               flexDirection: 'row',
@@ -308,7 +315,10 @@ export default function TabBar(props) {
                 />
               </TouchableOpacity>
             </View>
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                addTask(title);
+              }}>
               <Image
                 style={{height: 25, width: 25, resizeMode: 'contain'}}
                 source={require('../assets/send.png')}

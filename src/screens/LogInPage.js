@@ -10,11 +10,16 @@ import React, {useState} from 'react';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 import CustomTextInput from '../Components/CustomTextInput';
 import CustomButton from '../Components/CustomButton';
+import {login} from '../firebase';
+import {useDispatch} from 'react-redux';
 
 const {length, width} = Dimensions.get('screen');
 const LogInPage = props => {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  const dispatch = useDispatch();
+
   return (
     <View
       style={{
@@ -47,52 +52,15 @@ const LogInPage = props => {
         }}>
         LogIn
       </Text>
-      {/* <View>
-        <Text style={{color: '#fff', paddingBottom: 10}}>Username</Text>
-        <View
-          style={{
-            borderWidth: 1,
-            borderColor: '#979797',
-            backgroundColor: '#1D1D1D',
-            paddingVertical: 15,
-            borderRadius: 5,
-          }}>
-          <TextInput
-            style={{color: '#fff'}}
-            placeholder="Enter Your Username"
-            placeholderTextColor={'grey'}
-          />
-        </View>
-      </View> */}
       <CustomTextInput
-        label={'Username'}
-        placeholder={'Enter Your Username'}
-        value={username}
-        // onChangeText={setUsername}
+        label={'Email'}
+        placeholder={'Enter Your Email'}
+        value={email}
+        // onChangeText={setemail}
         onChangeText={text => {
-          setUsername(text);
+          setEmail(text);
         }}
       />
-      {/* <View>
-        <Text style={{color: '#fff', paddingBottom: 10, paddingTop: 20}}>
-          Password
-        </Text>
-        <View
-          style={{
-            borderWidth: 1,
-            borderColor: '#979797',
-            backgroundColor: '#1D1D1D',
-            paddingVertical: 15,
-            borderRadius: 5,
-          }}>
-          <TextInput
-            style={{color: '#fff'}}
-            placeholder="Enter Your Password"
-            placeholderTextColor={'grey'}
-            secureTextEntry
-          />
-        </View>
-      </View> */}
       <CustomTextInput
         label={'Password'}
         placeholder={'Enter Your Password'}
@@ -102,19 +70,9 @@ const LogInPage = props => {
           setPassword(password);
         }}
       />
-      {/* <TouchableOpacity
-        style={{
-          backgroundColor: '#8687E7',
-          alignItems: 'center',
-          paddingVertical: 15,
-          borderRadius: 5,
-          marginVertical: 40,
-        }}>
-        <Text style={{color: '#fff'}}>LOGIN</Text>
-      </TouchableOpacity> */}
       <CustomButton
         onPress={() => {
-          props.navigation.navigate('AppStack');
+          dispatch(login(email, password));
         }}
         title={'LOGIN'}
         containerStyle={{marginVertical: 40}}

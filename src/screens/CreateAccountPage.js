@@ -10,11 +10,14 @@ import React, {useState} from 'react';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 import CustomTextInput from '../Components/CustomTextInput';
 import CustomButton from '../Components/CustomButton';
+import {registerUser} from '../firebase';
+import {useDispatch} from 'react-redux';
 
 const {length, width} = Dimensions.get('screen');
 
 const CreateAccountPage = props => {
-  const [username, setUsername] = useState('');
+  const dispatch = useDispatch();
+  const [email, setEmail] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   return (
@@ -48,51 +51,14 @@ const CreateAccountPage = props => {
         }}>
         Register
       </Text>
-      {/* <View>
-        <Text style={{color: '#fff', paddingBottom: 10}}>Username</Text>
-        <View
-          style={{
-            borderWidth: 1,
-            borderColor: '#979797',
-            backgroundColor: '#1D1D1D',
-            paddingVertical: 15,
-            borderRadius: 5,
-          }}>
-          <TextInput
-            style={{color: '#fff'}}
-            placeholder="Enter Your Username"
-            placeholderTextColor={'grey'}
-          />
-        </View>
-      </View> */}
       <CustomTextInput
-        label={'Username'}
-        placeholder={'Enter Your Username'}
-        value={username}
-        onChangeText={username => {
-          setUsername(username);
+        label={'Email'}
+        placeholder={'Enter Your Email'}
+        value={email}
+        onChangeText={email => {
+          setEmail(email);
         }}
       />
-      {/* <View>
-        <Text style={{color: '#fff', paddingBottom: 10, paddingTop: 20}}>
-          Create New Password
-        </Text>
-        <View
-          style={{
-            borderWidth: 1,
-            borderColor: '#979797',
-            backgroundColor: '#1D1D1D',
-            paddingVertical: 15,
-            borderRadius: 5,
-          }}>
-          <TextInput
-            style={{color: '#fff'}}
-            placeholder="Create New Password"
-            placeholderTextColor={'grey'}
-            secureTextEntry
-          />
-        </View>
-      </View> */}
       <CustomTextInput
         label={'Create New Password'}
         placeholder={'Create New Password'}
@@ -102,26 +68,6 @@ const CreateAccountPage = props => {
         }}
         secureTextEntry
       />
-      {/* <View>
-        <Text style={{color: '#fff', paddingBottom: 10, paddingTop: 20}}>
-          Confirm Password
-        </Text>
-        <View
-          style={{
-            borderWidth: 1,
-            borderColor: '#979797',
-            backgroundColor: '#1D1D1D',
-            paddingVertical: 15,
-            borderRadius: 5,
-          }}>
-          <TextInput
-            style={{color: '#fff'}}
-            placeholder="Confirm Your Password"
-            placeholderTextColor={'grey'}
-            secureTextEntry
-          />
-        </View>
-      </View> */}
       <CustomTextInput
         label={'Confirm Password'}
         placeholder={'Confirm Password'}
@@ -131,22 +77,9 @@ const CreateAccountPage = props => {
         }}
         secureTextEntry
       />
-      {/* <TouchableOpacity
-        onPress={() => {
-          props.navigation.navigate('AppStack');
-        }}
-        style={{
-          backgroundColor: '#8687E7',
-          alignItems: 'center',
-          paddingVertical: 15,
-          borderRadius: 5,
-          marginVertical: 40,
-        }}>
-        <Text style={{color: '#fff'}}>Create An Account</Text>
-      </TouchableOpacity> */}
       <CustomButton
         onPress={() => {
-          props.navigation.navigate('AppStack');
+          dispatch(registerUser(email, newPassword, confirmPassword));
         }}
         title={'Create An Account'}
         containerStyle={{marginVertical: 40}}
