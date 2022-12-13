@@ -1,18 +1,25 @@
-import {View, Text, Image} from 'react-native';
+import {View, Text, Image, TouchableOpacity} from 'react-native';
 import React, {useEffect} from 'react';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 import {useDispatch, useSelector} from 'react-redux';
 import SplashScreen from 'react-native-splash-screen';
-import {saveUser} from '../redux/actions';
+import {saveTask, saveUser} from '../redux/actions';
+import {getTask} from '../firebase';
+import {useState} from 'react';
+import NavService from '../config/NavService';
 
 const HomePage = props => {
   const dispatch = useDispatch();
+  const uid = useSelector(state => state?.user?.userData?.uid);
+  const user = useSelector(state => state?.user?.userData);
+  console.log('user', user);
+  const [response, setResponse] = useState([]);
+
   useEffect(() => {
-    // dispatch(saveUser(null));
     SplashScreen.hide();
+    dispatch(getTask(uid, setResponse));
   }, []);
-  const user = useSelector(state => state.user);
-  console.log(user);
+  console.log(response, 'useeffect');
   return (
     <View
       style={{
@@ -51,6 +58,7 @@ const HomePage = props => {
           source={require('../assets/Checklist.png')}
         />
       </View>
+
       <Text
         style={{
           color: '#fff',
@@ -63,6 +71,24 @@ const HomePage = props => {
       <Text style={{color: '#fff', textAlign: 'center'}}>
         Tap + to add your tasks
       </Text>
+      <View style={{flex: 1, justifyContent: 'center'}}>
+        <TouchableOpacity
+          onPress={() => {
+            NavService.navigate('TaskPage');
+          }}
+          style={{
+            backgroundColor: '#8875FF',
+            width: '100%',
+            height: 50,
+            borderRadius: 5,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <Text style={{color: '#fff', fontSize: 20, fontWeight: '500'}}>
+            Your Tasks
+          </Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };

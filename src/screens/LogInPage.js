@@ -15,8 +15,8 @@ import {useDispatch} from 'react-redux';
 
 const {length, width} = Dimensions.get('screen');
 const LogInPage = props => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('A@b.com');
+  const [password, setPassword] = useState('Abcd123');
 
   const dispatch = useDispatch();
 

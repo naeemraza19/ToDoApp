@@ -13,6 +13,8 @@ import TabBar from './Components/TabBar';
 import Categories from './screens/Categories';
 import {useSelector} from 'react-redux';
 import ProfilePage from './screens/ProfilePage';
+import TaskPage from './screens/TaskPage';
+import CurrentTask from './screens/CurrentTask';
 
 const Stack = createNativeStackNavigator();
 
@@ -57,8 +59,8 @@ function HomeStack() {
       initialRouteName="HomePage">
       <Stack.Screen name="HomePage" component={HomePage} />
       <Stack.Screen name="Categories" component={Categories} />
-      {/* <Stack.Screen name="Menu" component={Menu} /> */}
-      {/* <Stack.Screen name="PlaceOrderPage" component={PlaceOrderPage} /> */}
+      <Stack.Screen name="TaskPage" component={TaskPage} />
+      <Stack.Screen name="CurrentTask" component={CurrentTask} />
       {/* <Stack.Screen name="OrderPage" component={OrderPage} /> */}
     </Stack.Navigator>
   );

@@ -60,10 +60,10 @@ export const registerUser = (email, password, confirmPassword) => {
         firestore()
           .collection('user')
           .doc(user.user.uid)
-          .set({email})
+          .set({email, uid: user.user.uid})
           .then(() => {
             dispatch(loaderStop());
-            dispatch(saveUser({email}));
+            dispatch(saveUser({email, uid: user.user.uid}));
             showSuccess('Account created successfully');
             NavService.reset(0, [{name: 'AppStack'}]);
           });
@@ -93,11 +93,18 @@ export const login = (email, password) => {
     auth()
       .signInWithEmailAndPassword(email, password)
       .then(user => {
-        console.log(user.user, 'user');
-        dispatch(saveUser({email}));
-        dispatch(loaderStop());
-        showSuccess('user login');
-        NavService.reset(0, [{name: 'AppStack'}]);
+        const uid = user.user._user.uid;
+        firestore()
+          .collection('user')
+          .doc(uid)
+          .get()
+          .then(data => {
+            console.log(data, 'user');
+            dispatch(saveUser(data?._data));
+            dispatch(loaderStop());
+            showSuccess('user login');
+            NavService.reset(0, [{name: 'AppStack'}]);
+          });
       })
       .catch(e => {
         dispatch(loaderStop());

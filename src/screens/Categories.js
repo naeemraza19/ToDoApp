@@ -1,8 +1,27 @@
-import {View, Text, TouchableOpacity, TextInput} from 'react-native';
+import {View, Text, TouchableOpacity, TextInput, FlatList} from 'react-native';
 import React from 'react';
 import CustomTextInput from '../Components/CustomTextInput';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 import ImagePicker from 'react-native-image-crop-picker';
+
+const colors = [
+  '#C9CC41',
+  '#66CC41',
+  '#41CCA7',
+  '#4181CC',
+  '#41A2CC',
+  '#CC8441',
+  '#9741CC',
+  '#CC4173',
+  '#C9CCbb',
+  '#66CCee',
+  '#41CCaf',
+  '#418111',
+  '#41A2ab',
+  '#CC84cd',
+  '#974112',
+  '#CC4112',
+];
 
 const chooseCategory = () => {
   ImagePicker.openPicker({
@@ -40,6 +59,24 @@ const Categories = props => {
         }}>
         <Text style={{color: '#fff'}}>Choose Icon</Text>
       </TouchableOpacity>
+      <View style={{paddingVertical: 20}}>
+        <Text style={{color: '#fff'}}>Category color:</Text>
+      </View>
+      <FlatList
+        data={colors}
+        horizontal
+        renderItem={({item, index}) => (
+          <TouchableOpacity
+            style={{
+              height: 40,
+              width: 40,
+              borderRadius: 50,
+              marginRight: 10,
+              backgroundColor: item,
+            }}
+          />
+        )}
+      />
       <View
         style={{
           flex: 1,

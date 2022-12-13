@@ -8,71 +8,42 @@ import {
   LayoutAnimation,
   Dimensions,
 } from 'react-native';
-import CustomButton from './CustomButton';
 import ActionSheet from 'react-native-actions-sheet';
-import Modal from 'react-native-modal';
 import {addTask} from '../firebase';
+import PriorityModal from './PriorityModal';
+import CategoriesModal from './CategoriesModal';
+import {useDispatch, useSelector} from 'react-redux';
+import NavService from '../config/NavService';
+import TaskPage from '../screens/TaskPage';
 
 const {length, width} = Dimensions.get('screen');
 
-const flagButtons = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-
-const tagCategories = [
-  {
-    icon: require('../assets/grocery.png'),
-    name: 'Grocery',
-  },
-  {
-    icon: require('../assets/work.png'),
-    name: 'Work',
-  },
-  {
-    icon: require('../assets/sport.png'),
-    name: 'Sports',
-  },
-  {
-    icon: require('../assets/design.png'),
-    name: 'Design',
-  },
-  {
-    icon: require('../assets/university.png'),
-    name: 'University',
-  },
-  {
-    icon: require('../assets/social.png'),
-    name: 'Social',
-  },
-  {
-    icon: require('../assets/music.png'),
-    name: 'Music',
-  },
-  {
-    icon: require('../assets/health.png'),
-    name: 'Health',
-  },
-  {
-    icon: require('../assets/movie.png'),
-    name: 'Movie',
-  },
-  {
-    icon: require('../assets/Home.png'),
-    name: 'Home',
-  },
-  {
-    icon: require('../assets/plus.png'),
-    name: 'Create New',
-  },
-];
+const showError = message => {
+  return Toast.show({
+    type: 'error',
+    text1: message,
+  });
+};
+const showSuccess = message => {
+  return Toast.show({
+    type: 'success',
+    text1: message,
+  });
+};
 
 export default function TabBar(props) {
   console.log(props);
   const {state, navigation} = props;
   const actionSheetRef = createRef();
   const [isVisible, setIsVisible] = useState(false);
-  const [priority, setPriority] = useState(1);
   const [isVisible2, setIsVisible2] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const uid = useSelector(state => state?.user?.userData?.uid);
+  const dispatch = useDispatch();
+  const [category, setCategory] = useState('');
+  const [priority, setPriority] = useState('');
+
   return (
     <View
       style={{
@@ -80,203 +51,33 @@ export default function TabBar(props) {
       }}>
       <ActionSheet ref={actionSheetRef}>
         <View style={{backgroundColor: '#363636', padding: 20}}>
-          <Modal
+          <PriorityModal
             isVisible={isVisible}
-            onRequestClose={() => {
+            setIsVisible={setIsVisible}
+            onSave={p => {
+              setPriority(p);
               setIsVisible(false);
-            }}>
-            <TouchableOpacity
-              activeOpacity={1}
-              onPress={() => {
-                setIsVisible(false);
-              }}
-              style={{
-                flex: 1,
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>
-              <View
-                style={{
-                  backgroundColor: '#363636',
-                  width: '100%',
-                  alignItems: 'center',
-                  paddingHorizontal: 10,
-                  paddingVertical: 10,
-                  borderRadius: 5,
-                }}>
-                <Text style={{marginBottom: 10, color: '#fff'}}>
-                  Task Priority
-                </Text>
-                <View
-                  style={{
-                    borderWidth: 1,
-                    borderColor: '#fff',
-                    width: '100%',
-                    marginBottom: 20,
-                  }}></View>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    flexWrap: 'wrap',
-                  }}>
-                  {flagButtons.map(item => {
-                    console.log(item);
-                    return (
-                      <TouchableOpacity
-                        onPress={() => {
-                          setPriority(item);
-                        }}
-                        style={{
-                          alignItems: 'center',
-                          backgroundColor:
-                            priority === item ? '#8875FF' : '#272727',
-                          paddingHorizontal: 25,
-                          paddingVertical: 10,
-                          borderRadius: 5,
-                          marginHorizontal: 2,
-                          marginVertical: 2,
-                        }}>
-                        <Image
-                          style={{
-                            height: 25,
-                            width: 25,
-                            resizeMode: 'contain',
-                          }}
-                          source={require('../assets/flag.png')}
-                        />
-                        <Text style={{color: '#fff', paddingTop: 10}}>
-                          {item}
-                        </Text>
-                      </TouchableOpacity>
-                    );
-                  })}
-                </View>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    width: '100%',
-                    marginTop: 20,
-                  }}>
-                  <TouchableOpacity
-                    onPress={() => {
-                      setIsVisible(false);
-                    }}
-                    style={{
-                      flex: 1,
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}>
-                    <Text style={{color: '#8875FF'}}>Cancel</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={{
-                      backgroundColor: '#8875FF',
-                      paddingVertical: 10,
-                      borderRadius: 5,
-                      flex: 1,
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}>
-                    <Text style={{color: '#fff'}}>Save</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </TouchableOpacity>
-          </Modal>
-          <Modal
+            }}
+          />
+          <CategoriesModal
             isVisible={isVisible2}
-            onRequestClose={() => {
-              setIsVisible2(false);
-            }}>
-            <TouchableOpacity
-              activeOpacity={1}
-              onPress={() => {
-                setIsVisible2(false);
-              }}
-              style={{
-                flex: 1,
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>
-              <View
-                style={{
-                  backgroundColor: '#363636',
-                  width: '100%',
-                  alignItems: 'center',
-                  paddingHorizontal: 10,
-                  paddingVertical: 10,
-                  borderRadius: 5,
-                }}>
-                <Text style={{marginBottom: 10, color: '#fff'}}>
-                  Choose Category
-                </Text>
-                <View
-                  style={{
-                    borderWidth: 1,
-                    borderColor: '#fff',
-                    width: '100%',
-                    marginBottom: 20,
-                  }}></View>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    flexWrap: 'wrap',
-                  }}>
-                  {tagCategories.map((item, index) => {
-                    console.log(index + 1 === tagCategories.length);
-                    return (
-                      <TouchableOpacity
-                        style={{
-                          height: 80,
-                          width: width / 3 - 40,
-                          alignItems: 'center',
-                          paddingVertical: 20,
-                          borderRadius: 5,
-                          marginHorizontal: 10,
-                          marginVertical: 10,
-                        }}>
-                        <Image
-                          style={{
-                            height: 25,
-                            width: 25,
-                            resizeMode: 'contain',
-                            tintColor:
-                              index + 1 === tagCategories.length && '#00a369',
-                            // or
-                            // tintColor:
-                            //   item.name === 'Create New' ? '#00a369' : null,
-                          }}
-                          source={item.icon}
-                        />
-                        <Text style={{color: '#fff', paddingTop: 10}}>
-                          {item.name}
-                        </Text>
-                      </TouchableOpacity>
-                    );
-                  })}
-                </View>
-                <View style={{width: '100%'}}>
-                  <CustomButton
-                    onPress={() => {
-                      setIsVisible2(false);
-                      actionSheetRef.current?.hide();
-                      props.navigation.navigate('Categories');
-                    }}
-                    title="Add Categories"
-                    containerStyle={{marginTop: 20}}
-                  />
-                </View>
-              </View>
-            </TouchableOpacity>
-          </Modal>
+            setIsVisible={setIsVisible2}
+            setCategory={setCategory}
+            addCategories={() => {
+              actionSheetRef.current?.hide();
+              props.navigation.navigate('Categories');
+            }}
+          />
           <Text style={{color: '#fff'}}>Add Task</Text>
-          <ActionSheetTextInput placeholder="Add title" />
+          <ActionSheetTextInput
+            placeholder="Add title"
+            value={title}
+            onChangeText={setTitle}
+          />
           <ActionSheetTextInput
             placeholder="Add Description"
-            value={''}
-            onChangeText={''}
+            value={description}
+            onChangeText={setDescription}
           />
           <View
             style={{
@@ -317,7 +118,18 @@ export default function TabBar(props) {
             </View>
             <TouchableOpacity
               onPress={() => {
-                addTask(title);
+                console.log(addTask, 'dfd');
+                dispatch(
+                  addTask(
+                    uid,
+                    title,
+                    description,
+                    category,
+                    priority,
+                    Date.now(),
+                  ),
+                );
+                actionSheetRef.current?.hide();
               }}>
               <Image
                 style={{height: 25, width: 25, resizeMode: 'contain'}}

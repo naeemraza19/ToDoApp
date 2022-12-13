@@ -5,6 +5,9 @@ import CustomButton from '../Components/CustomButton';
 import ImagePicker from 'react-native-image-crop-picker';
 import Modal from 'react-native-modal';
 import CustomTextInput from '../Components/CustomTextInput';
+import {useDispatch} from 'react-redux';
+import {logOut} from '../redux/actions';
+import NavService from '../config/NavService';
 
 const {width, height} = Dimensions.get('window');
 
@@ -20,6 +23,7 @@ const ProfilePage = props => {
     });
   };
 
+  const dispatch = useDispatch();
   const [isVisible, setIsVisible] = useState(false);
   const [isVisible2, setIsVisible2] = useState(false);
   return (
@@ -263,6 +267,12 @@ const ProfilePage = props => {
         </TouchableOpacity>
       </View>
       <TouchableOpacity
+        onPress={() => {
+          NavService.reset(0, [{name: 'AuthStack'}]);
+          setTimeout(() => {
+            dispatch(logOut());
+          }, 2000);
+        }}
         style={{margin: 20, flexDirection: 'row', alignItems: 'center'}}>
         <Image
           style={{
